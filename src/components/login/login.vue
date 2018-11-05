@@ -41,7 +41,7 @@ export default {
         // console.log(1)
         // 登录成功,将服务器签发的token保存到localStorage中
         // 其他组件需要使用token的,需要到本地存储获取
-        window.localStorage.setItem('admin-token', JSON.stringify('data.data'))
+        window.localStorage.setItem('admin-token', JSON.stringify(data.data))
         // 让其跳转到home组件
         this.$router.push({
           name: 'home'
