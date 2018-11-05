@@ -19,6 +19,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { saveUserInfo } from '@/assets/js/auth.js'
 export default {
   data () {
     return {
@@ -40,8 +41,8 @@ export default {
       if (data.meta.status === 200) {
         // console.log(1)
         // 登录成功,将服务器签发的token保存到localStorage中
-        // 其他组件需要使用token的,需要到本地存储获取
-        window.localStorage.setItem('admin-token', JSON.stringify(data.data))
+        // 其他组件需要使用token的,需要到本地存储获取,这里我们加载自己封装的auth.js里面的函数
+        saveUserInfo(data.data)
         // 让其跳转到home组件
         this.$router.push({
           name: 'home'

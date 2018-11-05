@@ -6,6 +6,9 @@ import Home from '@/components/home/home.vue'
 import UserList from '@/components/user-list/user-list'
 import RoleList from '@/components/role-list/role-list'
 
+// 加载自己封装的函数
+import { getUserInfo } from '@/assets/js/auth.js'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -38,14 +41,13 @@ const router = new Router({
 // 添加路由导航守卫
 router.beforeEach((to, from, next) => {
   // 如果是登录组件,则直接放行通过
-  // 如果不是登录组件,则检查token令牌,有令牌就放行,没有令牌就让其跳转到登录页
+  // 如果不是登录组件,则检查用户登录信息,如果已经登录就放行,没有就让其跳转到登录页
   // console.log(to)
   if (to.name === 'login') {
     next()
   } else {
-    // 检查token令牌,有则放心,无则跳转登录组件
-    const token = window.localStorage.getItem('admin-token')
-    if (!token) {
+    // 检查登录信息,有则放行,无则跳转登录组件
+    if (!getUserInfo()) {
       next({
         name: 'login'
       })
