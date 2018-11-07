@@ -54,17 +54,10 @@
 </template>
 
 <script>
-import { getToken } from '@/assets/js/auth.js'
 
 export default {
   async created () {
-    // console.log(localStorage)
-    const token = getToken()
-    // console.log(token)
     const res = await this.$http.get('/users', {
-      headers: {
-        Authorization: token // 配置请求头,携带token令牌
-      },
       params: { // 配置参数 pagenum 和pagesize 不能为空
         pagenum: 1,
         pagesize: 5
