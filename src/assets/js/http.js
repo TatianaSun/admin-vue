@@ -3,7 +3,6 @@
  */
 import axios from 'axios'
 import { getToken } from './auth.js'
-// 通过定义插件的配置来扩展Vue
 
 const http = axios.create({
   baseURL: 'http://localhost:8888/api/private/v1/'
@@ -21,6 +20,8 @@ http.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error)
 })
+
+// 通过定义插件的配置来扩展Vue
 const httpPlugin = {}
 httpPlugin.install = function (Vue, options) {
   // 添加实例方法
