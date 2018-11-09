@@ -14,7 +14,8 @@
         <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
           <el-button
             slot="append"
-            icon="el-icon-search"></el-button>
+            icon="el-icon-search"
+            @click="handleSearch"></el-button>
         </el-input>
       </el-col>
       <el-col :span="2">
@@ -45,9 +46,14 @@
         label="用户状态"
         width="100">
         <template slot-scope="scope">
-          <!-- 通过scope.row可以拿到当前遍历的行对象 -->
+          <!-- 通过scope.row可以拿到当前遍历的行对象
+          @change="(val) => {handleStateChange(val, scope.row)}"
+          change是element组件的switch自带的属性,控制开关的选中状态的一个方法
+          必须用箭头函数才能既获取开关状态,又获取行id
+          -->
           <el-switch
             v-model="scope.row.mg_state"
+            @change="(val) => {handleStateChange(val, scope.row)}"
             active-color="#13ce66"
             inactive-color="#ff4949">
           </el-switch>
@@ -57,9 +63,9 @@
         label="操作"
         width="200">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-edit"></el-button>
-          <el-button size="mini" type="danger" icon="el-icon-delete"></el-button>
-          <el-button size="mini" type="warning" icon="el-icon-success"></el-button>
+          <el-button plain size="mini" type="primary" icon="el-icon-edit"></el-button>
+          <el-button plain size="mini" type="danger" icon="el-icon-delete"></el-button>
+          <el-button plain size="mini" type="warning" icon="el-icon-check"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +78,7 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage"
+      :current-page.sync="currentPage"
       :page-sizes="[1, 2, 3, 4]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -85,8 +91,8 @@
 
 export default {
   async created () {
-    // 用户列表组件一上来就加载第一页,每页1条数据
-    this.loadUsersByPage(1, 1)
+    // 用户列表组件一上来就加载第一页
+    this.loadUsersByPage(1)
   },
   data () {
     return {
@@ -94,7 +100,7 @@ export default {
       tableData: [], // 表格列表数据
       totalSize: 0, // 总数据条数
       currentPage: 1, // 当前页码
-      pageSize: 1 // 每页条数
+      pageSize: 3 // 每页条数
     }
   },
   methods: {
@@ -112,16 +118,17 @@ export default {
     handleCurrentChange (currentPage) {
       // console.log(`当前页: ${currentPage}`)
       // 将currentPage 更新为最新点击的当前页码
-      this.currentPage = currentPage
+      // this.currentPage = currentPage
       // 拿到当前最新的每页的条数
-      this.loadUsersByPage(currentPage, this.pageSize)
+      this.loadUsersByPage(currentPage)
     },
     // 根据页码加载用户数据
-    async loadUsersByPage (page, pageSize) {
+    async loadUsersByPage (page, pageSize = 1) {
       const res = await this.$http.get('/users', {
         params: { // 配置参数 pagenum 和pagesize 不能为空
           pagenum: page, // 这个页码就是当前页码:current-page
-          pagesize: pageSize // 这个就是每页显示的条数page-size
+          pagesize: this.pageSize, // 这个就是每页显示的条数page-size
+          query: this.searchText // 根据搜索框的内容来搜索
         }
       })
       // console.log(res)
@@ -129,6 +136,25 @@ export default {
       // 动态渲染数据
       this.tableData = users
       this.totalSize = total
+    },
+    // 处理搜索功能
+    handleSearch () {
+      this.loadUsersByPage(1) // 从第一页开始展示
+    },
+    // switch开关状态改变,修改用户的登录状态
+    async handleStateChange (state, user) {
+      // console.log(state, user)
+      // 拿到用户id ,发起请求,根据val改变用户状态
+      const {id: userId} = user // 解构赋值,并给id改名为userId
+      const res = await this.$http.put(`/users/${userId}/state/${state}`)
+      // console.log(res)
+      if (res.data.meta.status === 200) {
+        // 提示用户修改状态成功
+        this.$message({
+          type: 'success',
+          message: `修改成功!用户状态更改为${state ? '启用' : '禁用'}`
+        })
+      }
     }
   }
 }

@@ -10,7 +10,7 @@ const http = axios.create({
 
 // 添加请求拦截器
 http.interceptors.request.use(function (config) {
-  console.log(config)
+  // console.log(config)
   // 在这里通过config 为请求配置选项.比如header
   if (config.url !== '/login') {
     config.headers['Authorization'] = getToken()
