@@ -65,7 +65,11 @@
         width="200">
         <template slot-scope="scope">
           <el-button plain size="mini" type="primary" icon="el-icon-edit"></el-button>
-          <el-button plain size="mini" type="danger" icon="el-icon-delete"></el-button>
+          <el-button
+            plain size="mini"
+            type="danger"
+            @click="handleDeleteUser(scope.row)"
+            icon="el-icon-delete"></el-button>
           <el-button plain size="mini" type="warning" icon="el-icon-check"></el-button>
         </template>
       </el-table-column>
@@ -238,6 +242,34 @@ export default {
           // 加载当前页
           this.loadUsersByPage(this.currentPage)
         }
+      })
+    },
+    // 删除用户
+    async handleDeleteUser (user) {
+      // console.log(user)
+      // 弹窗提示用户是否确认删除
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        // 拿到用户id
+        const {id: userId} = user
+        const res = await this.$http.delete(`/users/${userId}`)
+        // console.log(res)
+        if (res.data.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          // 删除成功重新加载当前页
+          this.loadUsersByPage(this.currentPage)
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     },
     // switch开关状态改变,修改用户的登录状态
