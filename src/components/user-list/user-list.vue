@@ -229,6 +229,10 @@ export default {
             type: 'success',
             message: '添加用户成功!'
           })
+          // 清空表单内容
+          for (let key in this.userForm) {
+            this.userForm[key] = ''
+          }
           // 关闭对话框
           this.dialogFormVisible = false
           // 加载当前页
