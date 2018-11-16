@@ -2,9 +2,12 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login.vue'
 import Home from '@/components/home/home.vue'
-
+// 用户管理组件
 import UserList from '@/components/user-list/user-list'
+// 角色管理组件
 import RoleList from '@/components/role-list/role-list'
+// 权限管理组件
+import RightsList from '@/components/rights-list/rights-list'
 
 // 加载自己封装的函数
 import { getUserInfo } from '@/assets/js/auth.js'
@@ -32,6 +35,11 @@ const router = new Router({
           name: 'role-list',
           path: '/roles',
           component: RoleList
+        },
+        {
+          name: 'rights-list',
+          path: '/rights',
+          component: RightsList
         }
       ]
     }
