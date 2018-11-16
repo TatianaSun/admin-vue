@@ -1,0 +1,110 @@
+<div user-list-wrap>
+  <el-row>
+    <el-col :span="24">
+      <el-breadcrumb class="user-list-breadcrumb" separator-class="el-icon-arrow-right">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+      </el-breadcrumb>
+    </el-col>
+  </el-row>
+  <el-row class="search-role">
+    <el-col :span="8">
+      <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
+        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
+      </el-input>
+    </el-col>
+    <el-col :span="2">
+      <el-button type="success" plain @click="dialogFormVisible = true">添加用户</el-button>
+    </el-col>
+  </el-row>
+  <el-table :data="tableData" style="width: 100%">
+    <el-table-column prop="username" label="姓名" width="180">
+    </el-table-column>
+    <el-table-column prop="email" label="邮箱" width="180">
+    </el-table-column>
+    <el-table-column prop="mobile" label="电话" width="180">
+    </el-table-column>
+    <el-table-column label="用户状态" width="100">
+      <template slot-scope="scope">
+        <!-- 通过scope.row可以拿到当前遍历的行对象
+          @change="(val) => {handleStateChange(val, scope.row)}"
+          change是element组件的switch自带的属性,控制开关的选中状态的一个方法
+          必须用箭头函数才能既获取开关状态,又获取行id
+          -->
+        <el-switch v-model="scope.row.mg_state" @change="(val) => {handleStateChange(val, scope.row)}" active-color="#13ce66" inactive-color="#ff4949">
+        </el-switch>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" width="200">
+      <template slot-scope="scope">
+        <el-button
+          plain size="mini"
+          type="primary"
+          icon="el-icon-edit"
+          @click="handleShowUserInfo(scope.row)"></el-button>
+        <el-button plain size="mini" type="danger" @click="handleDeleteUser(scope.row)" icon="el-icon-delete"></el-button>
+        <el-button plain size="mini" type="warning" icon="el-icon-check"></el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+  <!--
+      current-page: 就是当前页码
+      page-size: 每页多少条数据
+      page-sizes: 可以自定义每页多少条数据
+      total : 总条数
+     -->
+  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[1, 2, 3, 4]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalSize">
+  </el-pagination>
+  <!-- 添加用户的对话框 -->
+  <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
+    <!-- 为el-form添加表单验证:
+        必须要有:rules: 一个对象
+        表单中el-form-item 要有prop 方法
+
+        如果想要使用javascript来强行验证,需要添加ref属性,给ref起个名字(类似给元素起id名)
+        在javaScript中使用this.$refs['ref名字'].validate()验证表单
+        validate()里面接收一个函数,一般用箭头函数,参数就是valid ,返回布尔值,通过这个布尔值来判断是否验证通过
+      -->
+    <el-form :model="userForm" :rules="addUserRules" ref="addUserForm">
+      <el-form-item label="用户名" label-width="100px" prop="username">
+        <el-input v-model="userForm.username" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" label-width="100px" prop="password">
+        <el-input type="password" v-model="userForm.password" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" label-width="100px" prop="email">
+        <el-input v-model="userForm.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="电话" label-width="100px" prop="mobile">
+        <el-input v-model="userForm.mobile" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleAddUser">确 定</el-button>
+    </div>
+  </el-dialog>
+
+  <!-- 编辑用户对话框 -->
+  <el-dialog title="编辑用户" :visible.sync="dialogEditFormVisible">
+    <el-form :model="editUserForm" :rules="editUserRules" ref="editUserForm">
+      <el-form-item label="用户名" label-width="100px" prop="username">
+        <el-input
+          v-model="editUserForm.username"
+          autocomplete="off"
+          :disabled="true"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱" label-width="100px" prop="email">
+        <el-input v-model="editUserForm.email" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="电话" label-width="100px" prop="mobile">
+        <el-input v-model="editUserForm.mobile" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogEditFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleEditUser">确 定</el-button>
+    </div>
+  </el-dialog>
+</div>
