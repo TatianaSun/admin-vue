@@ -131,38 +131,35 @@ export default {
     },
     // 编辑用户
     async handleEditUser () {
-      console.log('编辑用户')
-
+      // console.log(this.editUserForm)
+      // 强行表单校验
+      this.$refs['editUserForm'].validate(async (valid) => {
+      // console.log(vaild)
+        if (!valid) { // 如果验证失败,返回 不提交
+          return false
+        }
+        // 如果通过了表单验证
+        const {id: userId} = this.editUserForm
+        const res = await this.$http.put(`/users/${userId}`,this.editUserForm)
+         if (res.data.meta.status === 200) {
+          // 根据响应做交互
+          this.$message({
+            type: 'success',
+            message: '用户信息更新成功!'
+          })
+          // 关闭对话框
+          this.dialogEditFormVisible = false
+          // 重新加载当前页
+          this.loadUsersByPage(this.currentPage)
+        }
+      })
     },
     // 展示要编辑的用户信息
     async handleShowUserInfo (user) {
       this.dialogEditFormVisible = true
-      // // 强行表单校验
-      // this.$refs['editUserForm'].validate(async (valid) => {
-      //   // console.log(vaild)
-      //   if (!valid) { // 如果验证失败,返回 不提交
-      //     return false
-      //   }
-      //   // 如果通过了表单验证
         const res = await this.$http.get(`/users/${user.id}`)
         // console.log(res)
         this.editUserForm = res.data.data
-      //   if (res.data.meta.status === 201) {
-      //     // 根据响应做交互
-      //     this.$message({
-      //       type: 'success',
-      //       message: '添加用户成功!'
-      //     })
-      //     // 清空表单内容
-      //     for (let key in this.userForm) {
-      //       this.userForm[key] = ''
-      //     }
-      //     // 关闭对话框
-      //     this.dialogFormVisible = false
-      //     // 加载当前页
-      //     this.loadUsersByPage(this.currentPage)
-      //   }
-      // })
     },
     // 删除用户
     async handleDeleteUser (user) {
