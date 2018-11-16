@@ -190,10 +190,24 @@ export default {
       })
     },
     // switch开关状态改变,修改用户的登录状态
-    async handleStateChange (state, user) {
-      // console.log(state, user)
-      // 拿到用户id ,发起请求,根据val改变用户状态
-      const {id: userId} = user // 解构赋值,并给id改名为userId
+    // async handleStateChange (state, user) {
+    //   // console.log(state, user)
+    //   // 拿到用户id ,发起请求,根据val改变用户状态
+    //   const {id: userId} = user // 解构赋值,并给id改名为userId
+    //   const res = await this.$http.put(`/users/${userId}/state/${state}`)
+    //   // console.log(res)
+    //   if (res.data.meta.status === 200) {
+    //     // 提示用户修改状态成功
+    //     this.$message({
+    //       type: 'success',
+    //       message: `修改成功!用户状态更改为${state ? '启用' : '禁用'}`
+    //     })
+    //   }
+    // },
+    // switch开关状态改变,修改用户的登录状态,改良
+    async handleStateChange (user) {
+      // console.log(user)
+      const {id: userId, mg_state: state} = user // 解构赋值
       const res = await this.$http.put(`/users/${userId}/state/${state}`)
       // console.log(res)
       if (res.data.meta.status === 200) {
