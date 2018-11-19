@@ -6,7 +6,10 @@
   </el-breadcrumb>
   <el-row class="role-btn">
     <el-col :span="24">
-      <el-button type="success" plain>添加角色</el-button>
+      <el-button
+        type="success"
+        plain
+        @click="addRolesDia = true">添加角色</el-button>
     </el-col>
   </el-row>
   <el-table
@@ -72,10 +75,30 @@
     <el-table-column
       label="操作">
       <template slot-scope="scope">
-        <el-button type="primary" size="mini" icon="el-icon-edit" plain></el-button>
-        <el-button type="danger" size="mini" icon="el-icon-delete" plain></el-button>
-        <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
+        <el-button type="primary" size="mini" plain>编辑</el-button>
+        <el-button
+          type="danger"
+          size="mini"
+          plain
+          @click="handleRemoveRoles(scope.row)">删除</el-button>
+        <!-- <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button> -->
+        <el-button type="warning" size="mini" plain>授权</el-button>
       </template>
     </el-table-column>
   </el-table>
+  <!-- 添加角色对话框 -->
+  <el-dialog title="添加角色" :visible.sync="addRolesDia">
+    <el-form :model="roleForm">
+      <el-form-item label="角色名称" label-width="120px">
+        <el-input v-model="roleForm.roleName" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="角色描述" label-width="120px">
+        <el-input v-model="roleForm.roleDesc" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="addRolesDia = false">取 消</el-button>
+      <el-button type="primary" @click="handleAddRoles">确 定</el-button>
+    </div>
+  </el-dialog>
 </div>
