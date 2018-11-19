@@ -6,9 +6,14 @@ export default {
     return {
       roleList: [],
       addRolesDia: false,
+      editRolesDia: false,
       roleForm:{
         roleName: '',
-        roleName: ''
+        roleDesc: ''
+      },
+      editRoleForm: {
+        roleName: '',
+        roleDesc: ''
       }
     }
   },
@@ -42,6 +47,38 @@ export default {
         // 重新加载角色列表
         this.loadRoleList()
       }
+    },
+    /**
+     * 编辑角色
+     * 一.显示编辑弹框,在弹框中加载要编辑的表单内容
+     * 1. 注册点击事件,拿到id,根据id呈现表单内容
+     * 二.编辑后提交表单,完成更新操作
+     */
+    async handleEditRoles (role) {
+      // console.log(role)
+      const {id: roleId} = role
+      const res = await this.$http.get(`/roles/${roleId}`)
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.editRoleForm = data // 让相应的数据呈现在表单中
+        // 弹出编辑对话框
+        this.editRolesDia = true
+      }
+    },
+    // 更新编辑
+    async handleUpdateRoles () {
+      // 拿到数据
+      const res = await this.$http.put(`/roles/${this.editRoleForm.roleId}`,this.editRoleForm)
+      if (res.data.meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '角色信息更新成功!'
+          })
+          // 关闭弹框
+          this.editRolesDia = false
+          // 重新加载角色列表
+          this.loadRoleList()
+        }
     },
     // 删除角色
     async handleRemoveRoles (role) {
