@@ -7,6 +7,7 @@ export default {
       roleList: [],
       addRolesDia: false,
       editRolesDia: false,
+      editRightsDia: false,
       roleForm:{
         roleName: '',
         roleDesc: ''
@@ -14,6 +15,14 @@ export default {
       editRoleForm: {
         roleName: '',
         roleDesc: ''
+      },
+      editRightForm: {
+
+      },
+      treeData: [],
+      treeProps: {
+        children: 'children',
+        label: 'authName'
       }
     }
   },
@@ -79,6 +88,21 @@ export default {
           // 重新加载角色列表
           this.loadRoleList()
         }
+    },
+    // 显示授权对话框
+    async showEditRights () {
+      const res = await this.$http.get('/rights/tree')
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        // 更新权限列表树菜单
+        this.treeData = data
+        // 显示权限对话框
+        this.editRightsDia = true
+      }
+    },
+    // 授权角色
+    async editRights () {
+      console.log(123)
     },
     // 删除角色
     async handleRemoveRoles (role) {

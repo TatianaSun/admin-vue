@@ -86,7 +86,11 @@
           plain
           @click="handleRemoveRoles(scope.row)">删除</el-button>
         <!-- <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button> -->
-        <el-button type="warning" size="mini" plain>授权</el-button>
+        <el-button
+          type="warning"
+          size="mini"
+          plain
+          @click="showEditRights">授权</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -118,6 +122,23 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="editRolesDia = false">取 消</el-button>
       <el-button type="primary" @click="handleUpdateRoles">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- 授权角色对话框 -->
+  <el-dialog title="授权角色" :visible.sync="editRightsDia">
+    <el-form :model="editRightForm">
+      <!-- 权限列表菜单树 -->
+      <el-tree
+        :data="treeData"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :props="treeProps">
+      </el-tree>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="editRightsDia = false">取 消</el-button>
+      <el-button type="primary" @click="editRights">确 定</el-button>
     </div>
   </el-dialog>
 </div>
