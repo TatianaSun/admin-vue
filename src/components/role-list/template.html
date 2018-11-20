@@ -90,7 +90,7 @@
           type="warning"
           size="mini"
           plain
-          @click="showEditRights">授权</el-button>
+          @click="showEditRights(scope.row)">授权</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -132,13 +132,15 @@
         :data="treeData"
         show-checkbox
         node-key="id"
+        ref="rightsTree"
         default-expand-all
-        :props="treeProps">
+        :props="treeProps"
+         :default-checked-keys='treeCheckedKeys'>
       </el-tree>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="editRightsDia = false">取 消</el-button>
-      <el-button type="primary" @click="editRights">确 定</el-button>
+      <el-button type="primary" @click="handleEditRights">确 定</el-button>
     </div>
   </el-dialog>
 </div>

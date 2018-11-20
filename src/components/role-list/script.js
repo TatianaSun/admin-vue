@@ -23,7 +23,9 @@ export default {
       treeProps: {
         children: 'children',
         label: 'authName'
-      }
+      },
+      treeCheckedKeys: [],
+      currentRole: null // 用来存储当前被授权的角色
     }
   },
   methods: {
@@ -90,19 +92,51 @@ export default {
         }
     },
     // 显示授权对话框
-    async showEditRights () {
+    async showEditRights (role) {
+      // 点击'授权'按钮,保存当前被授权的角色,用于给授权弹框提交表单的时候使用
+      this.currentRole = role
+      // console.log(role)
+      // console.log(role.children)
       const res = await this.$http.get('/rights/tree')
       const {data, meta} = res.data
       if (meta.status === 200) {
         // 更新权限列表树菜单
         this.treeData = data
+        // 找到角色拥有的所有权限的id,然后赋值给 treeCheckedKeys,让节点默认被选中
+        this.treeCheckedKeys = this.getRightsId(role.children)
         // 显示权限对话框
         this.editRightsDia = true
       }
     },
     // 授权角色
-    async editRights () {
-      console.log(123)
+    async handleEditRights () {
+      // 获取菜单树中已选中的所有节点
+      const checkedNodes = this.$refs.rightsTree.getCheckedNodes()
+      // 拿到所有权限节点的id及pid, 将其放到数组中,去重,然后转为字符串,以逗号分隔
+      let ids = ''
+      checkedNodes.forEach(function (item) {
+        ids += item.id + ',' + item.pid + ','
+
+      })
+      // console.log(ids)
+      // 数组去重,再将数组重新转成一个以','分隔的字符串去请求服务器接口
+      const setRightIds = new Set(ids.split(','))
+      setRightIds.delete('')
+      const rightIds = [...setRightIds].join(',')
+      // console.log(rightIds)
+      // console.log(this.currentRole)
+      const res = await this.$http.post(`/roles/${this.currentRole.id}/rights`, {
+        rids: rightIds
+      })
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.loadRoleList()
+        this.editRightsDia = false
+        this.$message({
+          type: 'success',
+          message: '授权成功!'
+        })
+      }
     },
     // 删除角色
     async handleRemoveRoles (role) {
@@ -129,6 +163,21 @@ export default {
           message: '已取消删除'
        })
      })
+    },
+    // 使用递归获取三级权限id
+    getRightsId (rightList) {
+      const arr = [] // 定义一个空数组,用来接收三级权限的id
+      const f = function (rightList) {
+        rightList.forEach(function (item) {
+          if (!item.children) {
+            arr.push(item.id)
+          } else {
+            f(item.children)
+          }
+        })
+      }
+      f(rightList)
+      return arr
     }
   }
 }
