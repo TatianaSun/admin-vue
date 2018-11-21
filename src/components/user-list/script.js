@@ -185,8 +185,21 @@ export default {
       }
     },
     // 分配角色权限
-    handleRoleRight () {
-      console.log("ok")
+    async handleRoleRight () {
+      // 得到用户id 以及用户选择的角色id
+      // console.log(this.handleRoleForm)
+      const {id: userId, rid: roleId} = this.handleRoleForm
+      const res = await this.$http.put(`/users/${userId}/role`,{
+        rid: roleId
+      })
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '角色分配成功'
+        })
+        this.rightFormVisible = false
+      }
     },
     // 删除用户
     async handleDeleteUser (user) {
