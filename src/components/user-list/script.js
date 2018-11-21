@@ -21,8 +21,14 @@ export default {
         email: '',
         mobile: ''
       },
+      handleRoleForm: { // 分配角色表单
+        username: '',
+        rid: -1 // 默认-1 标识没有权限
+      },
+      rolesList: [], // 分配角色对话框的角色列表
       dialogFormVisible: false, // 用来控制添加用户的对话框的弹出与关闭
       dialogEditFormVisible: false, // 用来控制编辑用户的对话框的弹出与关闭
+      rightFormVisible: false, // 用来控制分配角色的对话框的弹出与关闭
       // 添加表单验证规则
       addUserRules: {
         username: [
@@ -42,6 +48,7 @@ export default {
           { min: 7, max: 11, message: '长度在 7 到 11 个字符', trigger: 'blur' }
         ]
       },
+      // 编辑用户表单认证规则
       editUserRules: {
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
@@ -160,6 +167,26 @@ export default {
         const res = await this.$http.get(`/users/${user.id}`)
         // console.log(res)
         this.editUserForm = res.data.data
+    },
+    // 显示用户授权弹框
+    async handleShowRights (user) {
+      // console.log(user)
+      // 发送请求,拿到当前用户角色
+      const res = await this.$http.get(`/users/${user.id}`)
+      // console.log(res)
+      // 发请求,拿到角色列表
+      const resp = await this.$http.get(`/roles`)
+      // console.log(resp)
+      const {data, meta} = res.data
+      if (meta.status === 200 && resp.data.meta.status === 200) {
+        this.rightFormVisible = true // 弹出分配角色对话框
+        this.handleRoleForm = data // 更新分配角色表单
+        this.rolesList = resp.data.data // 更新角色列表
+      }
+    },
+    // 分配角色权限
+    handleRoleRight () {
+      console.log("ok")
     },
     // 删除用户
     async handleDeleteUser (user) {
