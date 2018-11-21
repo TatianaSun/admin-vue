@@ -164,6 +164,21 @@ export default {
        })
      })
     },
+    // 删除角色指定权限
+    async handleRemoveRights (role,right) {
+      // console.log(role,right)
+      const res = await this.$http.delete(`/roles/${role.id}/rights/${right.id}`)
+      const {data, meta} = res.data
+
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '删除权限成功!'
+        })
+        // 删除完成重新加载权限列表
+        role.children = data
+      }
+    },
     // 使用递归获取三级权限id
     getRightsId (rightList) {
       const arr = [] // 定义一个空数组,用来接收三级权限的id

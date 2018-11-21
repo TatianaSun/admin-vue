@@ -24,6 +24,7 @@
           :key="level1.id">
           <el-col :span="4">
             <el-tag
+              @close="handleRemoveRights(scope.row,level1)"
               closable
               type="">
               {{ level1.authName }}
@@ -38,6 +39,7 @@
               :key="level2.id">
               <el-col :span="4">
                 <el-tag
+                  @close="handleRemoveRights(scope.row,level2)"
                   closable
                   type="warning">
                   {{ level2.authName }}
@@ -49,6 +51,7 @@
                   <el-tag
                     v-for="level3 in level2.children"
                     closable
+                    @close="handleRemoveRights(scope.row,level3)"
                     type="success"
                     class="role-lv3"
                     :key="level3.id">
