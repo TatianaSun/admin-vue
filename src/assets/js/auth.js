@@ -17,7 +17,12 @@ export function getUserInfo () {
 
 // 获取用户信息的token令牌
 export function getToken () {
-  return JSON.parse(getUserInfo()).token
+  try {
+    // 本地存储的user-info 可能不是一个有效的JSON格式字符串
+    return JSON.parse(getUserInfo()).token
+  } catch (err) {
+    return '' // 所以避免程序出错,在err 时返回空字符串
+  }
 }
 
 // 删除用户信息
