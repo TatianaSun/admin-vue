@@ -42,10 +42,15 @@ export default {
         // 登录成功,将服务器签发的token保存到localStorage中
         // 其他组件需要使用token的,需要到本地存储获取,这里我们加载自己封装的auth.js里面的函数
         saveUserInfo(data.data)
-        // 让其跳转到home组件
-        this.$router.push({
-          name: 'home'
-        })
+        const {redirect} = this.$route.query
+        if (redirect) { // 如果查询字符串中有redirect,就让其跳转到这个字段里
+          this.$router.push(redirect.substr(1)) // substr(1)去掉hash后面那个"#"号
+        } else {
+          // 否则让其跳转到home组件
+          this.$router.push({
+            name: 'home'
+          })
+        }
         // 提示信息
         this.$message({
           type: 'success',

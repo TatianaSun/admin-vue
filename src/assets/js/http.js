@@ -32,7 +32,10 @@ http.interceptors.response.use(function (response) {
     // 400 表示没有token或者token无效,比如伪造的token
     // window.location.href = '#/login'
     router.push({
-      name: 'login'
+      name: 'login',
+      query: {
+        redirect: window.location.hash // 重定向到页面token失效时的页面
+      }
     })
   }
   return response // 非常重要,类似于next()
