@@ -1,16 +1,18 @@
-<div>
-  <!--
-    el-table:
-      :data  表格需要的数据
-      border 带边框
-      prop: 用来指定用哪个属性来展示节点名,指定label,那么tableData里面的label的节点标识就是节点名
-      这里的label 指定标题
-      child-key 用来指定组件展示的子节点,这里child-key="children"指定tableData中的children属性作为子节点
-      :indent-size="20" 层级的缩进大小:20,单位是像素
-      treeKey 节点id,用来指定数据对象的id名
-      parentKey 节点父id
-      levelKey 层级,深度
-   -->
+<div class="list-wrap">
+  <!-- 面包屑 -->
+  <el-breadcrumb class="list-breadcrumb" separator-class="el-icon-arrow-right">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+    <el-breadcrumb-item>商品分类</el-breadcrumb-item>
+  </el-breadcrumb>
+  <el-row class="role-btn">
+    <el-col :span="24">
+      <el-button
+        type="success"
+        plain
+        @click="handleShowCate">添加分类</el-button>
+    </el-col>
+  </el-row>
   <el-table :data="tableDate" border v-loading="loading">
     <el-table-tree-column
       fixed :expand-all="!!!1"
@@ -38,6 +40,7 @@
       </template>
     </el-table-column>
   </el-table>
+  <!-- 分页 -->
   <el-pagination
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
@@ -46,4 +49,27 @@
     :page-size="pageSize"
     layout="total, sizes, prev, pager, next, jumper" :total="totalSize">
   </el-pagination>
+  <!-- 添加分类对话框 -->
+  <el-dialog title="添加分类" :visible.sync="addCateDia">
+    <el-form :model="addCateForm">
+      <el-form-item label="分类名称" label-width="120px">
+        <el-input v-model="addCateForm.name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="父级名称" label-width="120px">
+        <!-- props参数:  告诉级联选择器我们的数据的配置
+         -->
+        <el-cascader
+          placeholder="默认添加一级分类"
+          :options="cateOptions"
+          :props="{value: 'cat_id', label: 'cat_name'}"
+          v-model="selectedOptions"
+          @change="handleCascadeChange">
+        </el-cascader>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="addCateDia = false">取 消</el-button>
+      <el-button type="primary" @click="addCateDia = false">确 定</el-button>
+    </div>
+  </el-dialog>
 </div>
