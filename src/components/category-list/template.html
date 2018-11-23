@@ -11,7 +11,7 @@
       parentKey 节点父id
       levelKey 层级,深度
    -->
-  <el-table :data="tableDate" border>
+  <el-table :data="tableDate" border v-loading="loading">
     <el-table-tree-column
       fixed :expand-all="!!!1"
       file-icon="icon icon-file"
@@ -38,4 +38,12 @@
       </template>
     </el-table-column>
   </el-table>
+  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page.sync="currentPage"
+    :page-sizes="[10, 20, 30]"
+    :page-size="pageSize"
+    layout="total, sizes, prev, pager, next, jumper" :total="totalSize">
+  </el-pagination>
 </div>
