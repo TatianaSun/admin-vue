@@ -1,0 +1,41 @@
+<div>
+  <!--
+    el-table:
+      :data  表格需要的数据
+      border 带边框
+      prop: 用来指定用哪个属性来展示节点名,指定label,那么tableData里面的label的节点标识就是节点名
+      这里的label 指定标题
+      child-key 用来指定组件展示的子节点,这里child-key="children"指定tableData中的children属性作为子节点
+      :indent-size="20" 层级的缩进大小:20,单位是像素
+      treeKey 节点id,用来指定数据对象的id名
+      parentKey 节点父id
+      levelKey 层级,深度
+   -->
+  <el-table :data="tableDate" border>
+    <el-table-tree-column
+      fixed :expand-all="!!!1"
+      file-icon="icon icon-file"
+      folder-icon="icon icon-folder"
+      prop="cat_name"
+      treeKey="cat_id"
+      parentKey="cat_pid"
+      levelKey="cat_level"
+      label="分类名称"
+      child-key="children"
+      width="320"
+      :indent-size="20">
+    </el-table-tree-column>
+    <el-table-column label="是否有效" width="180">
+      <!-- 表格列不会输出布尔值,所以自定义表格列 -->
+      <template slot-scope="scope">{{ scope.row.cat_deleted }}</template>
+    </el-table-column>
+    <el-table-column prop="cat_level" label="排序" width="100"></el-table-column>
+    <el-table-column label="操作" width="140">
+      <!-- 自定义表格列 -->
+      <template slot-scope="scope">
+        <el-button type="primary" size="mini" plain icon="el-icon-edit"></el-button>
+        <el-button type="danger" size="mini" plain icon="el-icon-delete"></el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>

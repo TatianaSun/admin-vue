@@ -6,12 +6,19 @@ import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
 import router from './router'
 
+// 引入ElTreeGrid
+import ElTreeGrid from 'element-tree-grid'
+
 // 使用Vue插件
 import httpPlugin from '@/assets/js/http.js'
 
 // 引入公共样式
 import '@/assets/css/style.css'
 Vue.use(ElementUI)
+
+// 将ElTreeGrid 注册为全局组件
+Vue.component(ElTreeGrid.name, ElTreeGrid)
+
 // 加载httpPlugin插件(封装自axios)
 Vue.use(httpPlugin)
 Vue.config.productionTip = false

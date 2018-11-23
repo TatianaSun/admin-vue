@@ -9,6 +9,9 @@ import RoleList from '@/components/role-list/role-list'
 // 权限管理组件
 import RightsList from '@/components/rights-list/rights-list'
 
+// 商品管理
+import CategoryList from '@/components/category-list/category-list.vue'
+
 // 加载自己封装的函数
 import { getUserInfo } from '@/assets/js/auth.js'
 
@@ -40,6 +43,11 @@ const router = new Router({
           name: 'rights-list',
           path: '/rights',
           component: RightsList
+        },
+        {
+          name: 'category-list',
+          path: '/categories',
+          component: CategoryList
         }
       ]
     }
