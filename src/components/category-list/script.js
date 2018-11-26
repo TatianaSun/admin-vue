@@ -1,3 +1,4 @@
+import Category from '@/api/category.js'
 export default {
   created () {
     this.loadCategories(1)
@@ -10,10 +11,14 @@ export default {
       totalSize: 0,
       loading: true,
       addCateDia: false,
+      editCateDia: false,
       addCateForm: {
         cat_name: '',
         cat_level: 0,
         cat_pid: []
+      },
+      editCateForm: {
+        cat_name: ''
       },
       cateOptions: []
     }
@@ -21,14 +26,11 @@ export default {
   methods: {
     async loadCategories (page) {
       this.loading = true
-      const res = await this.$http.get('/categories',{
-        params: {
-          type: 3,
-          pagenum: page,
-          pagesize: this.pageSize
-        }
+      const res = await Category.findbyType({
+        type: 3,
+        pagenum: page,
+        pagesize: this.pageSize
       })
-      // console.log(res)
       const {data, meta} = res.data
       if (meta.status === 200) {
         this.tableDate = data.result
@@ -81,12 +83,13 @@ export default {
           cat_pid = this.addCateForm.cat_pid[1]
           break
       }
-      // console.log(this.addCateForm.cat_name,this.addCateForm.cat_level,cat_pid)
-      const res = await this.$http.post('/categories',{
+
+      const res = await new Category({
         cat_name: this.addCateForm.cat_name,
         cat_level: this.addCateForm.cat_level,
         cat_pid
-      })
+      }).save()
+
       // console.log(res)
       const {data, meta} = res.data
       if (meta.status === 201) {
@@ -103,14 +106,38 @@ export default {
         this.loadCategories(this.currentPage)
       }
     },
+    // 显示编辑分类对话框
+    async showEditCate (category) {
+      const res = await Category.findbyId(category.cat_id)
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.editCateDia = true
+        this.editCateForm = data
+      }
+    },
+    // 处理编辑分类
+    async handleEditCates () {
+      const res = await Category.updateById(this.editCateForm.cat_id,this.editCateForm)
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        // 关闭编辑分类对话框
+        this.editCateDia = false
+        this.$message({
+          type: 'success',
+          message: '分类更新成功!'
+        })
+        // 重载当前页
+        this.loadCategories(this.currentPage)
+      }
+    },
     // 删除分类
-    async handleRemoveCate (category) {
+    handleRemoveCate (category) {
       this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then( async () => {
-        const res = await this.$http.delete(`/categories/${category.cat_id}`)
+        const res = await Category.deleteById(category.cat_id)
         const {data, meta} = res.data
         if (meta.status === 200) {
           this.$message({

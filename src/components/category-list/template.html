@@ -35,7 +35,12 @@
     <el-table-column label="操作" width="140">
       <!-- 自定义表格列 -->
       <template slot-scope="scope">
-        <el-button type="primary" size="mini" plain icon="el-icon-edit"></el-button>
+        <el-button
+          type="primary"
+          size="mini"
+          plain
+          icon="el-icon-edit"
+          @click="showEditCate(scope.row)"></el-button>
         <el-button
           type="danger"
           size="mini"
@@ -77,6 +82,18 @@
     <div slot="footer" class="dialog-footer">
       <el-button @click="addCateDia = false">取 消</el-button>
       <el-button type="primary" @click="handleAddCates">确 定</el-button>
+    </div>
+  </el-dialog>
+  <!-- 编辑分类对话框 -->
+  <el-dialog title="编辑分类" :visible.sync="editCateDia">
+    <el-form :model="editCateForm">
+      <el-form-item label="分类名称" label-width="120px">
+        <el-input v-model="editCateForm.cat_name" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="editCateDia = false">取 消</el-button>
+      <el-button type="primary" @click="handleEditCates">确 定</el-button>
     </div>
   </el-dialog>
 </div>
