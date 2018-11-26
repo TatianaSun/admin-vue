@@ -21,15 +21,15 @@ http.interceptors.request.use(function (config) {
 }, function (error) {
   return Promise.reject(error)
 })
-// 添加相应拦截器
-// 例如对每个接口进行403权限认证判断,如果相应数据是401,提示用户,没有权限操作
+// 添加响应拦截器
+// 例如对每个接口进行403权限认证判断,如果相应数据是403,提示用户,没有权限操作
 http.interceptors.response.use(function (response) {
   // console.log(response)
   const {meta} = response.data
-  if (meta.status === 401) {
+  if (meta.status === 403) {
     window.alert('您没有权限进行该操作')
-  } else if (meta.status === 400) {
-    // 400 表示没有token或者token无效,比如伪造的token
+  } else if (meta.status === 401) {
+    // 401 表示没有token或者token无效,比如伪造的token
     // window.location.href = '#/login'
     router.push({
       name: 'login',

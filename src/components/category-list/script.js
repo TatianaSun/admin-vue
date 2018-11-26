@@ -11,9 +11,11 @@ export default {
       loading: true,
       addCateDia: false,
       addCateForm: {
+        cat_name: '',
+        cat_level: 0,
+        cat_pid: []
       },
-      cateOptions: [],
-      selectedOptions: []
+      cateOptions: []
     }
   },
   methods: {
@@ -60,6 +62,44 @@ export default {
         // 显示弹框
         this.addCateDia = true
         this.cateOptions = data
+      }
+    },
+    // 添加分类
+    async handleAddCates () {
+      // console.log(this.addCateForm)
+      // cat_level就是cat_pid的长度,数组长度为0 ,cat_level就是0,表示一级分类,cat_pid=0
+      // 数组长度为1 ,cat_level就是1,表示二级分类,cat_pid=数组第0项的值
+      // 数组长度为2 ,cat_level就是2,表示三级分类,cat_pid=数组第1项的值
+      this.addCateForm.cat_level = this.addCateForm.cat_pid.length
+      let cat_pid = 0
+      switch (this.addCateForm.cat_pid.length) {
+        case 1:
+          cat_pid = this.addCateForm.cat_pid[0]
+          break
+        case 2:
+          cat_pid = this.addCateForm.cat_pid[1]
+          break
+      }
+      // console.log(this.addCateForm.cat_name,this.addCateForm.cat_level,cat_pid)
+      const res = await this.$http.post('/categories',{
+        cat_name: this.addCateForm.cat_name,
+        cat_level: this.addCateForm.cat_level,
+        cat_pid
+      })
+      // console.log(res)
+      const {data, meta} = res.data
+      if (meta.status === 201) {
+        this.$message({
+          type: 'success',
+          message: '添加分类成功!'
+        })
+        // 关闭对话框
+        this.addCateDia = false
+        // 清空表单
+        this.addCateForm.cat_name = '',
+        this.addCateForm.cat_pid = []
+        // 重载当前页
+        this.loadCategories(this.currentPage)
       }
     }
   }

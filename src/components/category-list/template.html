@@ -53,23 +53,25 @@
   <el-dialog title="添加分类" :visible.sync="addCateDia">
     <el-form :model="addCateForm">
       <el-form-item label="分类名称" label-width="120px">
-        <el-input v-model="addCateForm.name" autocomplete="off"></el-input>
+        <el-input v-model="addCateForm.cat_name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="父级名称" label-width="120px">
+      <el-form-item label="所属分类" label-width="120px">
         <!-- props参数:  告诉级联选择器我们的数据的配置
          -->
         <el-cascader
+          change-on-select
+          clearable
           placeholder="默认添加一级分类"
           :options="cateOptions"
           :props="{value: 'cat_id', label: 'cat_name'}"
-          v-model="selectedOptions"
+          v-model="addCateForm.cat_pid"
           @change="handleCascadeChange">
         </el-cascader>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="addCateDia = false">取 消</el-button>
-      <el-button type="primary" @click="addCateDia = false">确 定</el-button>
+      <el-button type="primary" @click="handleAddCates">确 定</el-button>
     </div>
   </el-dialog>
 </div>
