@@ -70,6 +70,7 @@ export default {
       // cat_level就是cat_pid的长度,数组长度为0 ,cat_level就是0,表示一级分类,cat_pid=0
       // 数组长度为1 ,cat_level就是1,表示二级分类,cat_pid=数组第0项的值
       // 数组长度为2 ,cat_level就是2,表示三级分类,cat_pid=数组第1项的值
+      //  cat_pid.length === 0 ? 0 : cat_pid[cat_pid.length -1]
       this.addCateForm.cat_level = this.addCateForm.cat_pid.length
       let cat_pid = 0
       switch (this.addCateForm.cat_pid.length) {
@@ -101,6 +102,30 @@ export default {
         // 重载当前页
         this.loadCategories(this.currentPage)
       }
+    },
+    // 删除分类
+    async handleRemoveCate (category) {
+      this.$confirm('此操作将永久删除该分类, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then( async () => {
+        const res = await this.$http.delete(`/categories/${category.cat_id}`)
+        const {data, meta} = res.data
+        if (meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '删除分类成功!'
+          })
+          // 重载当前页
+          this.loadCategories(this.currentPage)
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }

@@ -36,7 +36,12 @@
       <!-- 自定义表格列 -->
       <template slot-scope="scope">
         <el-button type="primary" size="mini" plain icon="el-icon-edit"></el-button>
-        <el-button type="danger" size="mini" plain icon="el-icon-delete"></el-button>
+        <el-button
+          type="danger"
+          size="mini"
+          plain
+          icon="el-icon-delete"
+          @click="handleRemoveCate(scope.row)"></el-button>
       </template>
     </el-table-column>
   </el-table>
