@@ -1,4 +1,4 @@
-import {http} from '../assets/js/http.js'
+import {http} from '@/assets/js/http'
 // 使用webpack打包的代码,某些Node模块在浏览器中也可以使用,例如path模块
 // import path from 'path'
 
@@ -21,6 +21,14 @@ export default class Category {
         type: condition.type,
         pagenum: condition.pagenum,
         pagesize: condition.pagesize
+      }
+    })
+  }
+
+  static findAll (type = 3) {
+    return http.get(baseURL, {
+      params: {
+        type: type
       }
     })
   }

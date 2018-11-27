@@ -8,10 +8,10 @@
   <!-- 级联选择器 -->
   <el-row class="hl-cascader">
     <el-col :span="24">
-      <el-cascader
-        :options="options"
-        >
-      </el-cascader>
+      <!-- 注册CategoryCascader公共组件标签
+        level用来指定分类的层级,默认为3级
+       -->
+      <category-cascader @change="handleChange" level="3"></category-cascader>
     </el-col>
   </el-row>
   <!-- 标签页选项卡 -->
@@ -19,27 +19,19 @@
     <el-tab-pane label="动态参数">
       <el-row>
         <el-col :span="4">
-          <el-button plain type="success">动态参数名称</el-button>
+          <el-button plain type="success">添加参数名称</el-button>
         </el-col>
         <el-table
-          :data="tableData5"
+          :data="tableData"
           style="width: 100%">
           <el-table-column type="expand">
-            <template slot-scope="props">
+            <template slot-scope="scope">
               <el-tag
+                v-for="item in scope.row.attr_vals.split(',')"
+                :key="item.attr_id"
                 closable
                 type="primary">
-                标签一
-              </el-tag>
-              <el-tag
-                closable
-                type="primary">
-                标签二
-              </el-tag>
-              <el-tag
-                closable
-                type="primary">
-                标签三
+                 {{item}}
               </el-tag>
               <el-input
                 class="input-new-tag"
@@ -54,17 +46,17 @@
               <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
             </template>
           </el-table-column>
+          <el-table-column type="index"></el-table-column>
           <el-table-column
-            label="商品 ID"
-            prop="id">
+            label="商品参数"
+            prop="attr_name">
           </el-table-column>
-          <el-table-column
-            label="商品名称"
-            prop="name">
-          </el-table-column>
-          <el-table-column
-            label="描述"
-            prop="desc">
+          <el-table-column label="操作">
+            <!-- 自定义表格列 -->
+            <template slot-scope="scope">
+              <el-button type="primary" plain icon="el-icon-edit" size="mini"></el-button>
+              <el-button type="danger" plain icon="el-icon-delete" size="mini"></el-button>
+            </template>
           </el-table-column>
         </el-table>
       </el-row>

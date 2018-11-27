@@ -1,3 +1,5 @@
+// 加载公共组件
+import CategoryCascader from '@/common/category-cascader'
 export default {
   created () {},
   data () {
@@ -5,39 +7,7 @@ export default {
       options: [],
       inputVisible: false,
       inputValue: '',
-      tableData5: [{
-        id: '12987122',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987123',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987125',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }, {
-        id: '12987126',
-        name: '好滋好味鸡蛋仔',
-        category: '江浙小吃、小吃零食',
-        desc: '荷兰优质淡奶，奶香浓而不腻',
-        address: '上海市普陀区真北路',
-        shop: '王小虎夫妻店',
-        shopId: '10333'
-      }]
+      tableData: []
     }
   },
   methods: {
@@ -50,6 +20,23 @@ export default {
         // 让input聚焦
         this.$refs.saveTagInput.$refs.input.focus()
       })
+    },
+    async handleChange (val) {
+      // console.log("监听到子组件内部的handleChange事件了",val)
+      const categoryId = val[2]
+      const res = await this.$http.get(`/categories/${categoryId}/attributes`,{
+        params: {
+          sel: 'many'
+        }
+      })
+      const {data, meta} = res.data
+      if (meta.status === 200) {
+        this.tableData = data
+      }
     }
+  },
+  components: {
+    // 将公共组件注册为子组件,然后,在模板html中注册标签才能使用
+    CategoryCascader
   }
 }
