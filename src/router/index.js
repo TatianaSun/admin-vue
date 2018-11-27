@@ -11,6 +11,12 @@ import RightsList from '@/components/rights-list/rights-list'
 
 // 商品管理
 import CategoryList from '@/components/category-list/category-list.vue'
+// 分类参数组件
+import CategoryParams from '@/components/category-params/category-params'
+// 商品列表组件
+import Goods from '@/components/goods/goods'
+// 商品添加组件
+import GoodsAdd from '@/components/goods-add/goods-add'
 
 // 加载自己封装的函数
 import { getUserInfo } from '@/assets/js/auth.js'
@@ -48,6 +54,21 @@ const router = new Router({
           name: 'category-list',
           path: '/categories',
           component: CategoryList
+        },
+        {
+          name: 'category-params',
+          path: '/params',
+          component: CategoryParams
+        },
+        {
+          name: 'goods',
+          path: '/goods',
+          component: Goods
+        },
+        {
+          name: 'goods-add',
+          path: '/goods/add',
+          component: GoodsAdd
         }
       ]
     }

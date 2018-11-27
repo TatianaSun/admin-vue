@@ -1,0 +1,74 @@
+<div class="list-wrap">
+  <!-- 面包屑 -->
+  <el-breadcrumb class="list-breadcrumb" separator-class="el-icon-arrow-right">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>商品管理</el-breadcrumb-item>
+    <el-breadcrumb-item>商品参数</el-breadcrumb-item>
+  </el-breadcrumb>
+  <!-- 级联选择器 -->
+  <el-row class="hl-cascader">
+    <el-col :span="24">
+      <el-cascader
+        :options="options"
+        >
+      </el-cascader>
+    </el-col>
+  </el-row>
+  <!-- 标签页选项卡 -->
+  <el-tabs type="border-card">
+    <el-tab-pane label="动态参数">
+      <el-row>
+        <el-col :span="4">
+          <el-button plain type="success">动态参数名称</el-button>
+        </el-col>
+        <el-table
+          :data="tableData5"
+          style="width: 100%">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-tag
+                closable
+                type="primary">
+                标签一
+              </el-tag>
+              <el-tag
+                closable
+                type="primary">
+                标签二
+              </el-tag>
+              <el-tag
+                closable
+                type="primary">
+                标签三
+              </el-tag>
+              <el-input
+                class="input-new-tag"
+                v-if="inputVisible"
+                v-model="inputValue"
+                ref="saveTagInput"
+                size="small"
+                @keyup.enter.native="handleInputConfirm"
+                @blur="handleInputConfirm"
+              >
+              </el-input>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="商品 ID"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="商品名称"
+            prop="name">
+          </el-table-column>
+          <el-table-column
+            label="描述"
+            prop="desc">
+          </el-table-column>
+        </el-table>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="静态属性">静态属性</el-tab-pane>
+  </el-tabs>
+</div>
