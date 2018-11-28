@@ -31,19 +31,24 @@
                 :key="item.attr_id"
                 closable
                 type="primary">
-                 {{item}}
+                 {{ item }}
               </el-tag>
+              <!-- 把inputVisible添加到当前行对象中 -->
+              <!-- 自动获得焦点
+                1. 自定义指令操作DOM
+                2. ref 操作DOM
+               -->
               <el-input
                 class="input-new-tag"
-                v-if="inputVisible"
-                v-model="inputValue"
+                v-if="scope.row.inputVisible"
                 ref="saveTagInput"
                 size="small"
-                @keyup.enter.native="handleInputConfirm"
-                @blur="handleInputConfirm"
+                @keyup.enter.native="handleInputConfirm(scope.row,$event)"
+                @blur="handleInputConfirm(scope.row,$event)"
               >
+              <!-- @blur="handleInputConfirm" 失去焦点也是这个函数 -->
               </el-input>
-              <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
+              <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ 添加值</el-button>
             </template>
           </el-table-column>
           <el-table-column type="index"></el-table-column>
