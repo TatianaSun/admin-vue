@@ -7,7 +7,12 @@ export default {
       options: [],
       inputVisible: false,
       tableData: [],
-      currentCateId: 0
+      currentCateId: 0,
+      addManyDia: false,
+      addManyForm: {
+        attr_sel: 'many',
+        attr_name: ''
+      }
     }
   },
   methods: {
@@ -54,7 +59,37 @@ export default {
     async handleChange (val) {
       // console.log("监听到子组件内部的handleChange事件了",val)
       const categoryId = this.currentCateId = val[2]
-      const res = await this.$http.get(`/categories/${categoryId}/attributes`,{
+      this.loadManyParams()
+    },
+    // 显示添加动态参数对话框
+    showManyDia () {
+      if (this.currentCateId === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先选择分类后再添加参数!'
+        })
+        return
+      }
+      this.addManyDia = true
+    },
+    // 添加动态参数分类
+    async handleAddManyParam () {
+      // console.log(this.addManyForm)
+      const resu = await this.$http.post(`/categories/${this.currentCateId}/attributes`,this.addManyForm)
+      const {data, meta} = resu.data
+      if (meta.status === 201) {
+        this.$message({
+          type: 'success',
+          message: "添加动态参数分类成功"
+        })
+        this.addManyDia = false // 关闭对话框
+        this.addManyForm.attr_name = '' // 清空表单元素
+        this.loadManyParams()
+      }
+    },
+    // 封装加载动态参数
+    async loadManyParams () {
+      const res = await this.$http.get(`/categories/${this.currentCateId}/attributes`,{
         params: {
           sel: 'many'
         }
@@ -62,10 +97,30 @@ export default {
       // console.log(res)
       const {data, meta} = res.data
       if (meta.status === 200) {
+        // 将attr_vals字符串处理成数组
+        data.forEach(item => {
+          item.attr_vals = item.attr_vals.split(',')
+        })
         this.tableData = data
         // 动态的为tableData的每一行动态添加inputVisible属性
         this.tableData.forEach(item => {
           this.$set(item, 'inputVisible', false)
+        })
+      }
+    },
+    // 删除标签分类
+    async handleRemoveTag (row, index) {
+      // console.log(row, index)
+      row.attr_vals.splice(index,1) // 删除该标签
+      const resul = await this.$http.put(`/categories/${this.currentCateId}/attributes/${row.attr_id}`, {
+          ...row, // 展开,对象拷贝,也称混入
+          attr_vals: row.attr_vals.join(',') // 这里的attr_vals就覆盖当前行的attr_vals了
+      })
+      const {data, meta} = resul.data
+      if (meta.status === 200) {
+        this.$message({
+          type: 'success',
+          message: '分类参数更新成功'
         })
       }
     }

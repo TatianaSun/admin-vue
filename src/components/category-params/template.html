@@ -19,7 +19,10 @@
     <el-tab-pane label="动态参数">
       <el-row>
         <el-col :span="4">
-          <el-button plain type="success">添加参数名称</el-button>
+          <el-button
+            plain
+            type="success"
+            @click="showManyDia">添加参数名称</el-button>
         </el-col>
         <el-table
           :data="tableData"
@@ -27,7 +30,8 @@
           <el-table-column type="expand">
             <template slot-scope="scope">
               <el-tag
-                v-for="item in scope.row.attr_vals.split(',')"
+                @close="handleRemoveTag(scope.row, index)"
+                v-for="(item, index) in scope.row.attr_vals"
                 :key="item.attr_id"
                 closable
                 type="primary">
@@ -68,4 +72,16 @@
     </el-tab-pane>
     <el-tab-pane label="静态属性">静态属性</el-tab-pane>
   </el-tabs>
+  <!-- 添加参数对话框 -->
+  <el-dialog title="参加参数名称" :visible.sync="addManyDia">
+    <el-form :model="addManyForm">
+      <el-form-item label="参数名称" label-width="120px">
+        <el-input v-model="addManyForm.attr_name" autocomplete="off"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="addManyDia = false">取 消</el-button>
+      <el-button type="primary" @click="handleAddManyParam">确 定</el-button>
+    </div>
+  </el-dialog>
 </div>
