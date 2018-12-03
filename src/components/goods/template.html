@@ -7,12 +7,12 @@
   </el-breadcrumb>
   <el-row class="search-role">
     <el-col :span="8">
-      <el-input placeholder="请输入内容" class="input-with-select">
-        <el-button slot="append" icon="el-icon-search"></el-button>
+      <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select">
+        <el-button slot="append" icon="el-icon-search" @click="handleSearch"></el-button>
       </el-input>
     </el-col>
     <el-col :span="2">
-      <el-button type="success" plain >添加商品</el-button>
+      <el-button type="success" plain @click="jumpTo">添加商品</el-button>
     </el-col>
   </el-row>
   <el-table

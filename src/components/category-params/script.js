@@ -43,6 +43,7 @@ export default {
         })
         // 清空input标签文本框
         e.target.value = ''
+        this.loadManyParams()
       }
     },
     // row 就是当前行
@@ -107,6 +108,30 @@ export default {
           this.$set(item, 'inputVisible', false)
         })
       }
+    },
+    // 删除动态分类参数
+    async removeManyPrama (row) {
+      // console.log(row)
+      this.$confirm('此操作将永久删除该参数, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then( async () => {
+        const res = await this.$http.delete(`categories/${row.cat_id}/attributes/${row.attr_id}`)
+        const {meta} = res.data
+        if (meta.status === 200) {
+          this.$message({
+            type: 'success',
+            message: '删除参数成功!'
+          })
+          this.loadManyParams()
+        }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     // 删除标签分类
     async handleRemoveTag (row, index) {

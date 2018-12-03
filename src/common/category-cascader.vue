@@ -2,7 +2,6 @@
   <div>
     <el-cascader
       clearable
-      expand-trigger="hover"
       @change="handleChange"
       :options="options"
       :props="{value:'cat_id',label:'cat_name'}">

@@ -1,3 +1,4 @@
+import router from '@/router/index.js'
 export default {
   created () {
     this.loadGoods(1)
@@ -13,6 +14,7 @@ export default {
           add_time: '',
         }
       ],
+      searchText: '',
       pagenum: 1,
       pagesize: 10,
       currentPage: 1,
@@ -33,6 +35,19 @@ export default {
         this.totalSize = data.total
         this.tableData = data.goods
       }
+    },
+    handleSearch () {
+      console.log(1)
+    },
+    jumpTo () {
+      // console.log(2)
+      // 跳转到 goods/add
+      router.push({
+      name: 'goods-add',
+      query: {
+        redirect: window.location.hash // 重定向
+      }
+    })
     },
     handleSizeChange (val) {
       this.pageSiza = val

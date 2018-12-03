@@ -11,9 +11,15 @@ import ElTreeGrid from 'element-tree-grid'
 
 // 使用Vue插件
 import httpPlugin from '@/assets/js/http.js'
-
 // 引入公共样式
 import '@/assets/css/style.css'
+// 引入富文本编辑器
+import VueQuillEditor from 'vue-quill-editor'
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 Vue.use(ElementUI)
 
 // 将ElTreeGrid 注册为全局组件
