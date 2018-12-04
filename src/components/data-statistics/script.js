@@ -1,7 +1,13 @@
 export default {
   created () {},
   data () {
-    return {}
+    return {
+      activeName: 'first'
+    }
   },
-  methods: {}
+  methods: {
+    handleClick () {
+      console.log(1)
+    }
+  }
 }
