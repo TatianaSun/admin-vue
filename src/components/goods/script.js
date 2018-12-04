@@ -43,11 +43,11 @@ export default {
       // console.log(2)
       // 跳转到 goods/add
       router.push({
-      name: 'goods-add',
-      query: {
-        redirect: window.location.hash // 重定向
-      }
-    })
+        name: 'goods-add',
+        query: {
+          redirect: window.location.hash // 重定向
+        }
+      })
     },
     handleSizeChange (val) {
       this.pageSiza = val

@@ -17,6 +17,10 @@ import CategoryParams from '@/components/category-params/category-params'
 import Goods from '@/components/goods/goods'
 // 商品添加组件
 import GoodsAdd from '@/components/goods-add/goods-add'
+// 订单管理组件
+import OrderManage from '@/components/order-manage/order-manage'
+// 数据统计组件
+import dataStatistics from '@/components/data-statistics/data-statistics'
 
 // 加载自己封装的函数
 import { getUserInfo } from '@/assets/js/auth.js'
@@ -69,6 +73,16 @@ const router = new Router({
           name: 'goods-add',
           path: '/goods/add',
           component: GoodsAdd
+        },
+        {
+          name: 'orders',
+          path: '/orders',
+          component: OrderManage
+        },
+        {
+          name: 'reports',
+          path: '/reports',
+          component: dataStatistics
         }
       ]
     }

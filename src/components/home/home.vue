@@ -13,10 +13,8 @@
           </div>
         </el-col>
         <el-col :span="4">
-          <div class="grid-content bg-purple">
-            <a
-              href="#"
-              @click.prevent="logout">退出</a>
+          <div class="grid-content bg-purple hl-signout">
+            <a href="#" style="text-decoration: none;" @click.prevent="logout">退出</a>
           </div>
         </el-col>
       </el-row>
@@ -119,10 +117,13 @@ export default {
   height: 100%;
   background-color: #B3C0D1;
   line-height: 60px;
-  text-align: center;
 }
 .hl-header .hl-title {
   font-size: 24px;
+  text-align: center;
+}
+.hl-signout {
+  text-align: right;
 }
 .hl-aside {
   background-color: #D3DCE6;
