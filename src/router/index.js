@@ -71,7 +71,7 @@ const router = new Router({
         },
         {
           name: 'goods-add',
-          path: '/goods/add',
+          path: '/add',
           component: GoodsAdd
         },
         {
